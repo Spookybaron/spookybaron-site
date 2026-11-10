@@ -1,10 +1,12 @@
 ---
 layout: base.njk
 ---
-<article class="post{% if type == "weekly" %} weekly{% endif %}">
-  <p class="date"><time datetime="{{ page.date | isoDate }}">{{ page.date | niceDate }}</time></p>
-  {% if type == "weekly" %}<p class="kicker">Weekly round-up</p>{% endif %}
-  <h1>{{ title }}</h1>
-  {{ content | dropDuplicateTitle(title) | safe }}
-</article>
-<p class="back"><a href="/journal/">← All entries</a></p>
+<div class="reading">
+  <article class="post{% if type == "weekly" %} weekly{% endif %}">
+    <p class="date"><time datetime="{{ page.date | isoDate }}">{{ page.date | niceDate }}</time></p>
+    {% if type == "weekly" %}<p class="kicker">Weekly round-up</p>{% endif %}
+    <h1>{{ title }}</h1>
+    {{ content | dropDuplicateTitle(title) | safe }}
+  </article>
+  <p class="back"><a href="/journal/">← All entries</a></p>
+</div>

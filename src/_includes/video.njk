@@ -1,0 +1,24 @@
+{% macro player(video, eager=false) %}
+<div class="yt-media{% if video.short %} is-short{% endif %}">
+  <button type="button" class="yt-play" data-id="{{ video.id }}" aria-label="Play {{ video.title }}">
+    <img
+      src="{{ video.thumb }}"
+      alt=""
+      width="480"
+      height="360"
+      decoding="async"
+      {% if video.short %}data-fallback="https://i.ytimg.com/vi/{{ video.id }}/hqdefault.jpg"{% endif %}
+      {% if eager %}loading="eager"{% else %}loading="lazy"{% endif %}
+    >
+    <span class="play-icon" aria-hidden="true"></span>
+  </button>
+</div>
+{% endmacro %}
+
+{% macro videoCard(video) %}
+<article class="vcard">
+  {{ player(video) }}
+  <h3><a href="{{ video.url }}" target="_blank" rel="noopener noreferrer">{{ video.title }}</a></h3>
+  {% if video.published %}<time datetime="{{ video.published }}">{{ video.published | niceDate }}</time>{% endif %}
+</article>
+{% endmacro %}

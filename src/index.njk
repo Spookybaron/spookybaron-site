@@ -1,42 +1,95 @@
 ---
 layout: base.njk
+description: Luke (Spookybaron), a UK creator. Games, videos, and a journal about making them.
 ---
-<section class="intro">
-  <h1>Hello.</h1>
-  <p>Games I’m making, and a journal about making them.</p>
+<section class="hero">
+  <p class="kicker">UK creator</p>
+  <h1>
+    <span class="intro-line">I’m Luke.</span>
+    <span class="brand-line">Spookybaron</span>
+  </h1>
+  <p class="lede">I make small games, film ordinary days, and write down how the work gets done. Games, videos, a journal — all in one place.</p>
+  <div class="hero-actions">
+    <a class="btn" href="/games/">Play a game</a>
+    <a class="btn btn-ghost" href="/videos/">Watch the videos</a>
+  </div>
 </section>
 
-<section id="games">
-  <h2>Games</h2>
-  <ul class="cards">
-    <li>
-      <a href="/games/eddie-vs-richie/">
-        <strong>Eddie vs Richie</strong>
-        <span>A scrap in the flat. Bats, kettles, a cricket ball. Works on a phone too.</span>
-      </a>
-    </li>
-    <li>
-      <a href="/games/grok-snake/">
-        <strong>Grok Snake</strong>
-        <span>A neon arcade snake. Steer with the arrows or a swipe, and don’t bite your tail.</span>
-      </a>
-    </li>
-    <li>
-      <a href="/games/cheeky-pete/">
-        <strong>Cheeky Pete</strong>
-        <span>Letters drop in time. Hit the matching key as each one lands, while Pete cheers you on.</span>
-      </a>
-    </li>
-  </ul>
-  <p><a href="/games/">All games →</a></p>
-</section>
+<ul class="bento">
+  <li class="bento-games">
+    <a href="/games/">
+      <p class="kicker">Play</p>
+      <strong>Games</strong>
+      <span class="blurb">Three browser games. A flat scrap, a neon snake, and letters that fall in time.</span>
+      <ul class="chips">
+        {%- for game in games %}
+        <li>{{ game.title }}</li>
+        {%- endfor %}
+      </ul>
+      <span class="go">Enter the arcade</span>
+    </a>
+  </li>
+  <li class="bento-journal">
+    <a href="/journal/">
+      <p class="kicker">Read</p>
+      <strong>Journal</strong>
+      <span class="blurb">Notes from making the games and the videos, including the quiet weeks.</span>
+      {%- set latestPosts = collections.journal | reverse | head(1) %}
+      {%- if latestPosts | length %}
+      <span class="peek">Latest: {{ latestPosts[0].data.title }}</span>
+      {%- endif %}
+      <span class="go">All entries</span>
+    </a>
+  </li>
+  <li class="bento-videos">
+    <a href="/videos/">
+      <p class="kicker">Watch</p>
+      <strong>Videos</strong>
+      <span class="blurb">Luke’s Life on Film. Recent uploads, and nothing plays until you press it.</span>
+      {%- if youtube.channels.life.ok %}
+      <span class="peek">Latest: {{ youtube.channels.life.videos[0].title }}</span>
+      {%- endif %}
+      <span class="go">Recent uploads</span>
+    </a>
+  </li>
+  <li class="bento-social">
+    <a href="/social/">
+      <p class="kicker">Elsewhere</p>
+      <strong>Social</strong>
+      <span class="blurb">YouTube, TikTok, Twitch and X. Each one shown the way that platform works best.</span>
+      <span class="go">Find the channels</span>
+    </a>
+  </li>
+</ul>
 
-<section>
-  <h2>Latest from the journal</h2>
-  <ul class="entries">
-    {%- for post in collections.journal | reverse | head(5) %}
-    <li><a href="{{ post.url }}">{{ post.data.title }}{% if post.data.type == "weekly" %} <span class="kind">Weekly</span>{% endif %}</a> <time>{{ post.date | niceDate }}</time></li>
+<section class="band">
+  <div class="band-head">
+    <h2>In the arcade</h2>
+    <a href="/games/">All games</a>
+  </div>
+  <ul class="game-grid">
+    {%- for game in games %}
+    <li>
+      <a href="{{ game.href }}">
+        <strong>{{ game.title }}</strong>
+        <span>{{ game.text }}</span>
+      </a>
+    </li>
     {%- endfor %}
   </ul>
-  <p><a href="/journal/">All entries →</a></p>
+</section>
+
+<section class="band">
+  <div class="band-head">
+    <h2>From the journal</h2>
+    <a href="/journal/">All entries</a>
+  </div>
+  <ul class="entries">
+    {%- for post in collections.journal | reverse | head(5) %}
+    <li>
+      <a href="{{ post.url }}">{{ post.data.title }}{% if post.data.type == "weekly" %} <span class="kind">Weekly</span>{% endif %}</a>
+      <time datetime="{{ post.date | isoDate }}">{{ post.date | niceDate }}</time>
+    </li>
+    {%- endfor %}
+  </ul>
 </section>

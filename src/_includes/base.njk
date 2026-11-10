@@ -4,20 +4,42 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% if title %}{{ title }} · {% endif %}Spookybaron</title>
+  <meta name="description" content="{% if description %}{{ description }}{% elif title %}{{ title }} — from Spookybaron{% else %}{{ site.description }}{% endif %}">
+  <meta name="theme-color" content="#07080c">
+  <meta name="color-scheme" content="dark">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="stylesheet" href="/css/site.css">
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/atom+xml" href="/journal/feed.xml" title="Journal">
 </head>
 <body>
+  <a class="skip" href="#content">Skip to content</a>
   <header class="top">
-    <a class="name" href="/">Spookybaron</a>
-    <nav>
-      <a href="/journal/">Journal</a>
-      <a href="/games/">Games</a>
-    </nav>
+    <div class="wrap bar">
+      <a class="logo" href="/">Spookybaron</a>
+      <nav aria-label="Primary">
+        {%- for item in site.nav %}
+        <a href="{{ item.href }}"{% if (item.href == "/journal/" and page.url and "/journal/" in page.url) or page.url == item.href %} aria-current="page"{% endif %}>{{ item.label }}</a>
+        {%- endfor %}
+      </nav>
+    </div>
   </header>
-  <main>
-    {{ content | safe }}
+  <main id="content">
+    <div class="wrap">
+      {{ content | safe }}
+    </div>
   </main>
+  <footer class="foot">
+    <div class="wrap foot-grid">
+      <p class="foot-brand"><strong>Spookybaron</strong> <span>Luke, in the UK.</span></p>
+      <nav aria-label="Footer">
+        {%- for item in site.nav %}
+        <a href="{{ item.href }}">{{ item.label }}</a>
+        {%- endfor %}
+        <a href="/journal/feed.xml">Journal feed</a>
+      </nav>
+    </div>
+  </footer>
+  <script src="/js/site.js" defer></script>
 </body>
 </html>
