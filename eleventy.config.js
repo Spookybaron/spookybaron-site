@@ -1,5 +1,6 @@
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/css");
+  eleventyConfig.addPassthroughCopy("src/favicon.ico");
 
   eleventyConfig.addFilter("niceDate", (date) =>
     new Date(date).toLocaleDateString("en-GB", {
