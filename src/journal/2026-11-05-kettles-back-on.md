@@ -57,9 +57,9 @@ Journal Bot also caught up the missing 1–4 November entries this morning. Scri
 
 * **Afternoon:** ElevenLabs “Smells” Bottom movie-trailer voiceover (~62s) — gravelly trailer announcer “Mark”, brass hits, record scratch, spray SFX, synth-pop bed. First mix interrupted after ~50 min background limit; finished from recorded lines. Luke said “Go for it” on a gruffer tagline; v2 lands “Bottom!” / pause / “Smells.” plus a Desmond voice sample of the opening.
 
-# **🐦 Faceless X Bot (@CoolHandLuke_82)**
+# **🐦 Faceless X Bot (my faceless X account)**
 
-* Luke finished bulk delete: posts ~11.8k → ~884; ~173 followers.  
+* Luke finished bulk delete: posts ~11.8k → ~884.  
 * Daily 8am drop was already on; it had failed Mon–Thu morning for empty usage (reset 08:50, after today's failed run). Delivered five catch-up quote drafts around 11:03: Take-Two/GTA “enough hits”, Elon orbital data centres, Burnham & Miliband steel drums, Avram Glazer on United, John Lewis Christmas ad backlash. Suggested Elon + Glazer as reply bait.
 
 # **📣 Social Media Bot**

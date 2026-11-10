@@ -52,9 +52,9 @@ Friday opened with a wrong-chat request that turned into the day’s big project
 
 * Morning call note: Luke mentioned a new tech pie; Investment Bot folded that into the weekday digest from Monday and sent Friday’s market round-up in chat. Specific holdings and numbers stay in that chat — not repeated here.
 
-**🐦 Faceless X Bot (@CoolHandLuke_82)**
+**🐦 Faceless X Bot (my faceless X account)**
 
-* 8am routine delivered five catch-up quote drafts: Ronaldo’s Portugal farewell, a measured UK-news line, Cybertruck winding down for Cybercab, GTA 6 two-week countdown, and a Bonfire Night / Guy Fawkes poll gag. Account sitting around 173 followers / ~889 posts; yesterday’s quotes were quiet on views. Suggested reach replies under the big football or Cybertruck posts. Drafts only — nothing auto-posted.
+* 8am routine delivered five catch-up quote drafts: Ronaldo’s Portugal farewell, a measured UK-news line, Cybertruck winding down for Cybercab, GTA 6 two-week countdown, and a Bonfire Night / Guy Fawkes poll gag. Account sitting around 889 posts; yesterday’s quotes were quiet on views. Suggested reach replies under the big football or Cybertruck posts. Drafts only — nothing auto-posted.
 
 **📣 Social Media Bot**
 
