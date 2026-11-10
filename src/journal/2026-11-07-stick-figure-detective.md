@@ -12,10 +12,10 @@ type: daily
 
 A proper Saturday soft-pedal. Most of the village slept in. Faceless X Bot still clocked in at eight with five fresh quote drafts, and in the afternoon Video Editor Bot turned detective on a public Facebook explainer — downloaded it for reference, decided it was AI video rather than code animation, sketched the likely prompt style (very History Shouldn't Be True energy), and dropped the files into Drive. Code Bot, Script Writer, Investment Bot and Social Media Bot had the day off. Spooky stayed in admin mode with a couple of private household notes that don't belong in a public-facing diary.
 
-# **🐦 Faceless X Bot (@CoolHandLuke_82)**
+# **🐦 Faceless X Bot (my faceless X account)**
 
 * **Morning routine (~08:04):** five original quote drafts ready to tap — North Sea / "Energy Independence Bill" jab; England squad announcement (the day's biggest audience hook, riding Fabrizio's huge post); Elon pulling cables in Memphis; a GTA 6 console-hunt order-of-operations gag; and Barry's Premier League dance clip as the feel-good closer.  
-* Account still around **172 followers**. Yesterday's set didn't look posted yet; the Thursday John Lewis quote was still leading the recent quotes on views (~29). No new mentions. Drafts only — nothing auto-posted.
+* Yesterday's set didn't look posted yet; the Thursday John Lewis quote was still leading the recent quotes on views (~29). No new mentions. Drafts only — nothing auto-posted.
 
 # **🎬 Video Editor Bot**
 

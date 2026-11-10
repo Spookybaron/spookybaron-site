@@ -1,0 +1,83 @@
+---
+layout: base.njk
+title: Social
+description: Luke on YouTube, TikTok, Twitch and X.
+permalink: /social/
+---
+{% from "video.njk" import videoCard %}
+
+<header class="page-head">
+  <p class="kicker">Elsewhere</p>
+  <h1>Social</h1>
+  <p class="lede">The same person, a few different rooms. Each one is set up the way that site works best, and every name below was checked before it was linked.</p>
+</header>
+
+{% for key in ["spooky", "life"] %}
+{% set ch = youtube.channels[key] %}
+<section class="platform" id="yt-{{ ch.key }}" aria-labelledby="yt-{{ ch.key }}-title">
+  <p class="kicker">YouTube · @{{ ch.handle }}</p>
+  <h2 id="yt-{{ ch.key }}-title">{{ ch.name }}</h2>
+  <p>{{ ch.blurb }}</p>
+  <p class="page-actions"><a class="btn" href="{{ ch.url }}" target="_blank" rel="noopener noreferrer me">Open channel<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+  {% if ch.ok %}
+  <ul class="video-grid">
+    {%- for video in ch.videos | head(4) %}
+    <li>{{ videoCard(video) }}</li>
+    {%- endfor %}
+  </ul>
+  {% else %}
+  <div class="notice">
+    <p>Recent uploads couldn’t be fetched when this page was built. The channel link above still works.</p>
+  </div>
+  {% endif %}
+</section>
+{% endfor %}
+
+<section class="platform" id="tiktok" aria-labelledby="tiktok-title">
+  <div class="platform-split">
+    <div>
+      <p class="kicker">TikTok · {{ social.tiktok.handle }}</p>
+      <h2 id="tiktok-title">{{ social.tiktok.name }}</h2>
+      <p>TikTok’s own profile embed. If the card stays plain, TikTok didn’t load it — the button still opens the channel.</p>
+      <p class="page-actions"><a class="btn" href="{{ social.tiktok.url }}" target="_blank" rel="noopener noreferrer me">Open TikTok<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+    </div>
+    <div class="tiktok-hold">
+      <blockquote class="tiktok-embed" cite="{{ social.tiktok.url }}" data-unique-id="spookybaron" data-embed-from="oembed" data-embed-type="creator">
+        <section>
+          <a class="tiktok-fallback" target="_blank" rel="noopener noreferrer" href="{{ social.tiktok.url }}?refer=creator_embed">
+            <span class="monogram" aria-hidden="true">SB</span>
+            <span>
+              <strong>{{ social.tiktok.name }}</strong>
+              <span>{{ social.tiktok.handle }} on TikTok</span>
+            </span>
+          </a>
+        </section>
+      </blockquote>
+    </div>
+  </div>
+  <script async src="https://www.tiktok.com/embed.js"></script>
+</section>
+
+<section class="platform" id="twitch" aria-labelledby="twitch-title">
+  <p class="kicker">Twitch · {{ social.twitch.handle }}</p>
+  <h2 id="twitch-title">{{ social.twitch.name }}</h2>
+  <p>The player shows the stream when it’s live, and Twitch’s offline screen when it isn’t.</p>
+  <p class="page-actions"><a class="btn" href="{{ social.twitch.url }}" target="_blank" rel="noopener noreferrer me">Open Twitch<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+  <div class="twitch-slot" data-channel="{{ social.twitch.handle }}">
+    <p class="twitch-waiting">Player loading…</p>
+  </div>
+</section>
+
+<section class="platform" id="x" aria-labelledby="x-title">
+  <p class="kicker">X · {{ social.x.handle }}</p>
+  <h2 id="x-title" class="visually-hidden">{{ social.x.name }} on X</h2>
+  <article class="x-card">
+    <div class="monogram" aria-hidden="true">SB</div>
+    <div>
+      <p class="x-name">{{ social.x.name }}</p>
+      <p class="handle">{{ social.x.handle }}</p>
+      <p>Posts and clips. Follow along on X.</p>
+      <p class="page-actions"><a class="btn" href="{{ social.x.url }}" target="_blank" rel="noopener noreferrer me">Follow on X<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+    </div>
+  </article>
+</section>

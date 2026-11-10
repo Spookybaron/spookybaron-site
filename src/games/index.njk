@@ -1,26 +1,21 @@
 ---
 layout: base.njk
 title: Games
+description: Browser games by Luke. Eddie vs Richie, Grok Snake and Cheeky Pete.
 eleventyExcludeFromCollections: true
 ---
-<h1>Games</h1>
-<ul class="cards">
+<header class="page-head">
+  <p class="kicker">Play</p>
+  <h1>Games</h1>
+  <p class="lede">Three games, played in the browser. Each one opens full screen, including on a phone.</p>
+</header>
+<ul class="game-grid">
+  {%- for game in games %}
   <li>
-    <a href="/games/eddie-vs-richie/">
-      <strong>Eddie vs Richie</strong>
-      <span>A scrap in the flat. Bats, kettles, a cricket ball. Works on a phone too.</span>
+    <a href="{{ game.href }}">
+      <strong>{{ game.title }}</strong>
+      <span>{{ game.text }}</span>
     </a>
   </li>
-  <li>
-    <a href="/games/grok-snake/">
-      <strong>Grok Snake</strong>
-      <span>A neon arcade snake. Steer with the arrows or a swipe, and don’t bite your tail.</span>
-    </a>
-  </li>
-  <li>
-    <a href="/games/cheeky-pete/">
-      <strong>Cheeky Pete</strong>
-      <span>Letters drop in time. Hit the matching key as each one lands, while Pete cheers you on.</span>
-    </a>
-  </li>
+  {%- endfor %}
 </ul>

@@ -1,11 +1,21 @@
 ---
 layout: base.njk
 title: Journal
+description: Luke’s journal about making games and videos.
 eleventyExcludeFromCollections: true
 ---
-<h1>Journal</h1>
-<ul class="entries">
-  {%- for post in collections.journal | reverse %}
-    <li><a href="{{ post.url }}">{{ post.data.title }}{% if post.data.type == "weekly" %} <span class="kind">Weekly</span>{% endif %}</a> <time>{{ post.date | niceDate }}</time></li>
-  {%- endfor %}
-</ul>
+<div class="reading">
+  <header class="page-head">
+    <p class="kicker">Read</p>
+    <h1>Journal</h1>
+    <p class="lede">How the games and the videos get made, written as it happens. There’s a <a href="/journal/feed.xml">feed</a> if you want the new ones delivered.</p>
+  </header>
+  <ul class="entries">
+    {%- for post in collections.journal | reverse %}
+    <li>
+      <a href="{{ post.url }}">{{ post.data.title }}{% if post.data.type == "weekly" %} <span class="kind">Weekly</span>{% endif %}</a>
+      <time datetime="{{ post.date | isoDate }}">{{ post.date | niceDate }}</time>
+    </li>
+    {%- endfor %}
+  </ul>
+</div>

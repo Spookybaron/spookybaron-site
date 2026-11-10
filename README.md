@@ -1,6 +1,6 @@
 # spookybaron-site
 
-My website: a home page, a journal, and my games. It's hosted on Cloudflare and rebuilds on its own whenever something is pushed to `main`.
+My website: a home page, games, a journal, videos, and the other places I post. It's hosted on Cloudflare and rebuilds on its own whenever something is pushed to `main`.
 
 ## Writing a journal entry
 
@@ -22,7 +22,7 @@ Entries are written in Markdown: `**bold**`, `*italic*`, `[a link](https://examp
 
 ## Games
 
-Games live in their own repos. Each time the site builds, `scripts/add-games.js` copies the latest version of each game into `/games/<name>/`. To add a game, add it to the list in that file and give it a card on the home page (`src/index.njk`) and on the games page (`src/games/index.njk`).
+Games live in their own repos. Each time the site builds, `scripts/add-games.js` copies the latest version of each game into `/games/<name>/`. To add a game, add it to the list in that file and add a card in `src/_data/games.js`. That list is what the home page and the games page both show.
 
 The games right now:
 
@@ -31,6 +31,10 @@ The games right now:
 - Cheeky Pete — `/games/cheeky-pete/`
 
 A change to a game repo doesn't rebuild this site by itself. To pick it up, push anything here, or click **Retry deployment** on the latest deploy in Cloudflare.
+
+## Videos and social
+
+The Videos page lists recent uploads from Luke’s Life on Film. The Social page has the YouTube channels, TikTok, Twitch and X. Those video lists are fetched from YouTube’s public feed while the site builds. If YouTube doesn’t answer, the page still builds and shows a link to the channel instead.
 
 ## Cloudflare settings
 

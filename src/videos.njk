@@ -1,0 +1,44 @@
+---
+layout: base.njk
+title: Videos
+description: Recent uploads from Luke’s Life on Film.
+permalink: /videos/
+---
+{% from "video.njk" import player, videoCard %}
+{% set ch = youtube.channels.life %}
+
+<header class="page-head">
+  <p class="kicker">YouTube · @{{ ch.handle }}</p>
+  <h1>{{ ch.name }}</h1>
+  <p class="lede">{{ ch.blurb }} Press play and the video loads then. Nothing starts on its own.</p>
+  <p class="page-actions"><a class="btn" href="{{ ch.url }}" target="_blank" rel="noopener noreferrer me">Open the channel<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+</header>
+
+{% if ch.ok %}
+<section class="featured" aria-label="Latest video">
+  <article class="vcard featured-card">
+    {{ player(ch.videos[0], true) }}
+    <h2><a href="{{ ch.videos[0].url }}" target="_blank" rel="noopener noreferrer">{{ ch.videos[0].title }}</a></h2>
+    {% if ch.videos[0].published %}<time datetime="{{ ch.videos[0].published }}">{{ ch.videos[0].published | niceDate }}</time>{% endif %}
+  </article>
+</section>
+
+{% if ch.videos | length > 1 %}
+<section aria-labelledby="more-videos">
+  <h2 id="more-videos" class="section-title">More recent uploads</h2>
+  <ul class="video-grid">
+    {%- for video in ch.videos %}
+    {%- if not loop.first %}
+    <li>{{ videoCard(video) }}</li>
+    {%- endif %}
+    {%- endfor %}
+  </ul>
+</section>
+{% endif %}
+{% else %}
+<div class="notice">
+  <h2>The latest videos didn’t load this time</h2>
+  <p>They’re fetched from YouTube when the site is built. YouTube didn’t answer, so the list is empty for now. The channel itself is still there.</p>
+  <p><a class="btn" href="{{ ch.url }}" target="_blank" rel="noopener noreferrer">Watch on YouTube<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+</div>
+{% endif %}
