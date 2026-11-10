@@ -10,6 +10,16 @@ const games = [
     repo: "https://github.com/Spookybaron/EddieRichieGame.git",
     files: ["index.html", "css", "js", "music"],
   },
+  {
+    name: "grok-snake",
+    repo: "https://github.com/Spookybaron/GrokSnakeGame.git",
+    files: ["index.html", "style.css", "game.js"],
+  },
+  {
+    name: "cheeky-pete",
+    repo: "https://github.com/Spookybaron/CheekyPete.git",
+    files: ["index.html", "style.css", "game.js", "assets"],
+  },
 ];
 
 const tmp = ".games-tmp";
