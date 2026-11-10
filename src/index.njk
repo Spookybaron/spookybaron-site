@@ -15,14 +15,27 @@ layout: base.njk
         <span>A scrap in the flat. Bats, kettles, a cricket ball. Works on a phone too.</span>
       </a>
     </li>
+    <li>
+      <a href="/games/grok-snake/">
+        <strong>Grok Snake</strong>
+        <span>A neon arcade snake. Steer with the arrows or a swipe, and don’t bite your tail.</span>
+      </a>
+    </li>
+    <li>
+      <a href="/games/cheeky-pete/">
+        <strong>Cheeky Pete</strong>
+        <span>Letters drop in time. Hit the matching key as each one lands, while Pete cheers you on.</span>
+      </a>
+    </li>
   </ul>
+  <p><a href="/games/">All games →</a></p>
 </section>
 
 <section>
   <h2>Latest from the journal</h2>
   <ul class="entries">
     {%- for post in collections.journal | reverse | head(5) %}
-    <li><a href="{{ post.url }}">{{ post.data.title }}</a> <time>{{ post.date | niceDate }}</time></li>
+    <li><a href="{{ post.url }}">{{ post.data.title }}{% if post.data.type == "weekly" %} <span class="kind">Weekly</span>{% endif %}</a> <time>{{ post.date | niceDate }}</time></li>
     {%- endfor %}
   </ul>
   <p><a href="/journal/">All entries →</a></p>

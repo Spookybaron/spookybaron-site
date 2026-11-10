@@ -18,11 +18,17 @@ My website: a home page, a journal, and my games. It's hosted on Cloudflare and 
 
 4. Click **Commit changes**. The site updates a minute or so later.
 
-Entries are written in Markdown: `**bold**`, `*italic*`, `[a link](https://example.com)`, and a blank line between paragraphs.
+Entries are written in Markdown: `**bold**`, `*italic*`, `[a link](https://example.com)`, and a blank line between paragraphs. Pictures go in `src/journal/images/`, and an entry links one as `/journal/images/your-picture.png`.
 
 ## Games
 
-Games live in their own repos. Each time the site builds, `scripts/add-games.js` copies the latest version of each game into `/games/<name>/`. To add a game, add it to the list in that file and give it a card on the home page (`src/index.njk`).
+Games live in their own repos. Each time the site builds, `scripts/add-games.js` copies the latest version of each game into `/games/<name>/`. To add a game, add it to the list in that file and give it a card on the home page (`src/index.njk`) and on the games page (`src/games/index.njk`).
+
+The games right now:
+
+- Eddie vs Richie — `/games/eddie-vs-richie/`
+- Grok Snake — `/games/grok-snake/`
+- Cheeky Pete — `/games/cheeky-pete/`
 
 A change to a game repo doesn't rebuild this site by itself. To pick it up, push anything here, or click **Retry deployment** on the latest deploy in Cloudflare.
 
