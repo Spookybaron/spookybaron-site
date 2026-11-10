@@ -28,11 +28,10 @@ A change to a game repo doesn't rebuild this site by itself. To pick it up, push
 
 ## Cloudflare settings
 
-When connecting this repo in Cloudflare (**Workers & Pages → Create → Pages → Connect to Git**):
+The site is deployed as a Cloudflare Worker that serves static files. `wrangler.jsonc` tells Cloudflare to publish the `_site` folder. The settings in Cloudflare are:
 
-- Framework preset: **None**
 - Build command: `npm run build`
-- Build output directory: `_site`
+- Deploy command: `npx wrangler deploy`
 
 ## Running it on your own computer
 

@@ -1,0 +1,8 @@
+// Settings for Cloudflare: publish the built site in _site as static files.
+{
+  "name": "spookybaron-site",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./_site"
+  }
+}
