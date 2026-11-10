@@ -1,0 +1,29 @@
+---
+layout: base.njk
+---
+<section class="intro">
+  <h1>Hello.</h1>
+  <p>Games I’m making, and a journal about making them.</p>
+</section>
+
+<section id="games">
+  <h2>Games</h2>
+  <ul class="cards">
+    <li>
+      <a href="/games/eddie-vs-richie/">
+        <strong>Eddie vs Richie</strong>
+        <span>A scrap in the flat. Bats, kettles, a cricket ball. Works on a phone too.</span>
+      </a>
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h2>Latest from the journal</h2>
+  <ul class="entries">
+    {%- for post in collections.journal | reverse | head(5) %}
+    <li><a href="{{ post.url }}">{{ post.data.title }}</a> <time>{{ post.date | niceDate }}</time></li>
+    {%- endfor %}
+  </ul>
+  <p><a href="/journal/">All entries →</a></p>
+</section>

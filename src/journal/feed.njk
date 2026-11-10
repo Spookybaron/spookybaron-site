@@ -1,0 +1,23 @@
+---
+permalink: /journal/feed.xml
+eleventyExcludeFromCollections: true
+layout: false
+tags: []
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Spookybaron · Journal</title>
+  <id>urn:spookybaron:journal</id>
+  <link href="/journal/"/>
+  {%- set latest = collections.journal | last %}
+  <updated>{{ (latest.date if latest else page.date) | isoDate }}</updated>
+  {%- for post in collections.journal | reverse %}
+  <entry>
+    <title>{{ post.data.title | escape }}</title>
+    <link href="{{ post.url }}"/>
+    <id>urn:spookybaron:journal:{{ post.fileSlug }}</id>
+    <updated>{{ post.date | isoDate }}</updated>
+    <content type="html">{{ post.content | escape }}</content>
+  </entry>
+  {%- endfor %}
+</feed>

@@ -1,0 +1,12 @@
+{
+  "name": "spookybaron-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "eleventy && node scripts/add-games.js",
+    "start": "eleventy --serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "3.1.8"
+  }
+}
