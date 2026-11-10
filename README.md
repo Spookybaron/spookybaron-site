@@ -18,7 +18,7 @@ My website: a home page, a journal, and my games. It's hosted on Cloudflare and 
 
 4. Click **Commit changes**. The site updates a minute or so later.
 
-Entries are written in Markdown: `**bold**`, `*italic*`, `[a link](https://example.com)`, and a blank line between paragraphs.
+Entries are written in Markdown: `**bold**`, `*italic*`, `[a link](https://example.com)`, and a blank line between paragraphs. Pictures go in `src/journal/images/`, and an entry links one as `/journal/images/your-picture.png`.
 
 ## Games
 
