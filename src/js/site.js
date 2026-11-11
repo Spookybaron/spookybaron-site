@@ -43,6 +43,8 @@
     slot.dataset.ready = "1";
     var hosts = [
       location.hostname,
+      "spookybaron.co.uk",
+      "www.spookybaron.co.uk",
       "spookybaron-site.lukebaron.workers.dev",
       "localhost",
       "127.0.0.1",

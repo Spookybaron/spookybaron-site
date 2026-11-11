@@ -1,0 +1,19 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+layout: false
+---
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>{{ site.url }}/</loc></url>
+  <url><loc>{{ site.url }}/games/</loc></url>
+  <url><loc>{{ site.url }}/journal/</loc></url>
+  <url><loc>{{ site.url }}/videos/</loc></url>
+  <url><loc>{{ site.url }}/social/</loc></url>
+  {%- for game in games %}
+  <url><loc>{{ site.url }}{{ game.href }}</loc></url>
+  {%- endfor %}
+  {%- for post in collections.journal %}
+  <url><loc>{{ site.url }}{{ post.url }}</loc></url>
+  {%- endfor %}
+</urlset>

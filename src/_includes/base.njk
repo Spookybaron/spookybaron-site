@@ -3,8 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if title %}{{ title }} · {% endif %}Spookybaron</title>
-  <meta name="description" content="{% if description %}{{ description }}{% elif title %}{{ title }} — from Spookybaron{% else %}{{ site.description }}{% endif %}">
+  {% set pageTitle %}{% if title %}{{ title }} · {% endif %}Spookybaron{% endset %}
+  {% set pageDesc %}{% if description %}{{ description }}{% elif title %}{{ title }} — from Spookybaron{% else %}{{ site.description }}{% endif %}{% endset %}
+  {% set canonical = site.url + (page.url or "/") %}
+  <title>{{ pageTitle | trim }}</title>
+  <meta name="description" content="{{ pageDesc | trim }}">
+  <link rel="canonical" href="{{ canonical }}">
+  <meta property="og:title" content="{{ pageTitle | trim }}">
+  <meta property="og:description" content="{{ pageDesc | trim }}">
+  <meta property="og:url" content="{{ canonical }}">
+  <meta property="og:type" content="website">
   <meta name="theme-color" content="#07080c">
   <meta name="color-scheme" content="dark">
   <meta name="referrer" content="strict-origin-when-cross-origin">
