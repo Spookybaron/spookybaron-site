@@ -11,14 +11,23 @@
     });
   });
 
+  var playlistId = /^[A-Za-z0-9_-]{13,40}$/;
+
   document.querySelectorAll(".yt-play").forEach(function (button) {
     button.addEventListener("click", function () {
       var id = button.getAttribute("data-id") || "";
-      if (!videoId.test(id)) return;
+      var playlist = button.getAttribute("data-playlist") || "";
+      var src = "";
+      if (videoId.test(id)) {
+        src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0";
+      } else if (playlistId.test(playlist)) {
+        src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + playlist + "&rel=0";
+      }
+      if (!src) return;
       var label = button.getAttribute("aria-label") || "YouTube video";
       var iframe = document.createElement("iframe");
       iframe.className = "yt-frame";
-      iframe.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&rel=0";
+      iframe.src = src;
       iframe.title = label.replace(/^Play\s+/, "") || "YouTube video";
       iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
       iframe.allowFullscreen = true;

@@ -26,8 +26,10 @@ permalink: /social/
     {%- endfor %}
   </ul>
   {% else %}
-  <div class="notice">
-    <p>Recent uploads couldn’t be fetched when this page was built. The channel link above still works.</p>
+  <div class="yt-media playlist-fallback">
+    <button type="button" class="yt-play" data-playlist="{{ ch.uploads }}" aria-label="Play recent uploads from {{ ch.name }}">
+      <span class="play-icon" aria-hidden="true"></span>
+    </button>
   </div>
   {% endif %}
 </section>

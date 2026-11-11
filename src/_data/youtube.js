@@ -1,7 +1,12 @@
 // Recent uploads for the two public YouTube channels.
-// The channel id is read from the channel page, then the public RSS feed is
-// fetched. If either step fails, the build still succeeds and the page shows
-// a link to the channel instead of a video grid.
+// Channel ids are fixed, so the build only requests the public RSS feed.
+// A saved copy in youtube-cache.json is used when the live feed does not answer,
+// and that file is rewritten whenever a live fetch works.
+// Set YOUTUBE_FETCH=fail to skip the network and use the saved list.
+
+import { readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const CHANNELS = [
   {
@@ -9,6 +14,7 @@ const CHANNELS = [
     handle: "Spookybaron",
     name: "Spooky Baron",
     url: "https://www.youtube.com/@Spookybaron",
+    channelId: "UC1uinYx_VdlOCFbMgVwxohw",
     blurb: "Gaming, retro, VR, and the cartoons.",
   },
   {
@@ -16,12 +22,18 @@ const CHANNELS = [
     handle: "LukesLifeOnFilm",
     name: "Luke’s Life on Film",
     url: "https://www.youtube.com/@LukesLifeOnFilm",
+    channelId: "UCfTNKc-Ni1_n8UxUC9e6JiA",
     blurb: "Everyday filming: days out, the house, and whatever has just been made.",
   },
 ];
 
 const LIMIT = 12;
-const UA = "Mozilla/5.0 (compatible; SpookybaronSite/1.0; +https://spookybaron-site.lukebaron.workers.dev)";
+const ATTEMPTS = 3;
+const TIMEOUT_MS = 10000;
+const BROWSER_UA =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
+
+const cachePath = join(dirname(fileURLToPath(import.meta.url)), "youtube-cache.json");
 
 function decode(value) {
   return value
@@ -36,30 +48,24 @@ function decode(value) {
     .trim();
 }
 
-async function fetchText(url) {
-  const response = await fetch(url, {
-    redirect: "follow",
-    signal: AbortSignal.timeout(12000),
-    headers: {
-      "user-agent": UA,
-      "accept-language": "en-GB,en;q=0.9",
-    },
-  });
-  if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
-  return response.text();
-}
-
-function channelIdFrom(html) {
-  const patterns = [
-    /"externalId":"(UC[\w-]{22})"/,
-    /"browseId":"(UC[\w-]{22})"/,
-    /youtube\.com\/channel\/(UC[\w-]{22})/,
-  ];
-  for (const pattern of patterns) {
-    const match = html.match(pattern);
-    if (match) return match[1];
-  }
-  return null;
+function cleanVideo(video) {
+  if (!video || !/^[A-Za-z0-9_-]{11}$/.test(video.id || "")) return null;
+  const title = typeof video.title === "string" ? video.title.trim() : "";
+  if (!title) return null;
+  const watch = `https://www.youtube.com/watch?v=${video.id}`;
+  const url =
+    typeof video.url === "string" && video.url.startsWith("https://www.youtube.com/")
+      ? video.url
+      : watch;
+  const short = url.includes("/shorts/");
+  return {
+    id: video.id,
+    title,
+    published: typeof video.published === "string" ? video.published : "",
+    url,
+    short,
+    thumb: `https://i.ytimg.com/vi/${video.id}/${short ? "oardefault" : "hqdefault"}.jpg`,
+  };
 }
 
 function videosFrom(xml) {
@@ -68,7 +74,6 @@ function videosFrom(xml) {
     const id = chunk.match(/<yt:videoId>([A-Za-z0-9_-]{11})<\/yt:videoId>/)?.[1];
     if (!id) continue;
     const title = decode(chunk.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? "");
-    if (!title) continue;
     const published = chunk.match(/<published>([^<]+)<\/published>/)?.[1] ?? "";
     const href =
       chunk.match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"/)?.[1] ||
@@ -82,40 +87,123 @@ function videosFrom(xml) {
     } catch {
       // keep the watch URL
     }
-    videos.push({
-      id,
-      title,
-      published,
-      url,
-      short: url.includes("/shorts/"),
-      thumb: `https://i.ytimg.com/vi/${id}/${url.includes("/shorts/") ? "oardefault" : "hqdefault"}.jpg`,
-    });
+    const video = cleanVideo({ id, title, published, url });
+    if (video) videos.push(video);
     if (videos.length >= LIMIT) break;
   }
   return videos;
 }
 
-async function loadChannel(channel) {
+function readCache() {
   try {
-    const html = await fetchText(channel.url);
-    const channelId = channelIdFrom(html);
-    if (!channelId) throw new Error("channel id not found on the channel page");
-    const rss = await fetchText(
-      `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`,
-    );
-    const videos = videosFrom(rss);
+    const data = JSON.parse(readFileSync(cachePath, "utf8"));
+    return data && typeof data === "object" ? data : { channels: {} };
+  } catch {
+    return { channels: {} };
+  }
+}
+
+function savedVideos(cache, key) {
+  const list = cache.channels?.[key];
+  if (!Array.isArray(list)) return [];
+  return list.map(cleanVideo).filter(Boolean).slice(0, LIMIT);
+}
+
+function writeCache(cache) {
+  const stored = {
+    fetchedAt: new Date().toISOString(),
+    channels: {},
+  };
+  for (const [key, list] of Object.entries(cache.channels || {})) {
+    stored.channels[key] = (Array.isArray(list) ? list : [])
+      .map(cleanVideo)
+      .filter(Boolean)
+      .slice(0, LIMIT)
+      .map(({ id, title, published, url }) => ({ id, title, published, url }));
+  }
+  writeFileSync(cachePath, `${JSON.stringify(stored, null, 2)}\n`);
+}
+
+async function fetchText(url) {
+  if (process.env.YOUTUBE_FETCH === "fail") {
+    throw new Error("live fetch skipped");
+  }
+  let lastError = new Error("fetch failed");
+  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+    try {
+      const response = await fetch(url, {
+        redirect: "follow",
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+        headers: {
+          "user-agent": BROWSER_UA,
+          accept: "application/atom+xml,application/xml,text/xml,*/*;q=0.8",
+          "accept-language": "en-GB,en;q=0.9",
+        },
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const text = await response.text();
+      if (!text.includes("<feed") && !text.includes("<entry>")) {
+        throw new Error("response was not a video feed");
+      }
+      return text;
+    } catch (error) {
+      lastError = error;
+      const reason = error.name === "TimeoutError" ? `timed out after ${TIMEOUT_MS}ms` : error.message;
+      console.warn(`YouTube feed attempt ${attempt}/${ATTEMPTS} failed (${reason})`);
+      if (attempt < ATTEMPTS) {
+        await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+      }
+    }
+  }
+  throw lastError;
+}
+
+function withUploads(channel, videos, fromCache) {
+  return {
+    ...channel,
+    ok: videos.length > 0,
+    fromCache,
+    videos,
+    uploads: `UU${channel.channelId.slice(2)}`,
+  };
+}
+
+async function loadChannel(channel, cache) {
+  const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channel.channelId}`;
+  try {
+    const xml = await fetchText(feedUrl);
+    const videos = videosFrom(xml);
     if (!videos.length) throw new Error("feed had no videos");
-    console.log(`YouTube @${channel.handle}: ${videos.length} videos`);
-    return { ...channel, ok: true, channelId, videos };
+    console.log(`YouTube @${channel.handle}: ${videos.length} videos from the live feed`);
+    return { channel: withUploads(channel, videos, false), videos };
   } catch (error) {
-    console.warn(`YouTube @${channel.handle} unavailable (${error.message}). Linking the channel only.`);
-    return { ...channel, ok: false, channelId: null, videos: [] };
+    const saved = savedVideos(cache, channel.key);
+    if (saved.length) {
+      console.warn(
+        `YouTube @${channel.handle} live feed failed (${error.message}). Using ${saved.length} saved videos.`,
+      );
+      return { channel: withUploads(channel, saved, true), videos: null };
+    }
+    console.warn(
+      `YouTube @${channel.handle} live feed failed (${error.message}) and no saved list exists.`,
+    );
+    return { channel: withUploads(channel, [], false), videos: null };
   }
 }
 
 export default async function () {
-  const loaded = await Promise.all(CHANNELS.map(loadChannel));
+  const cache = readCache();
+  const loaded = await Promise.all(CHANNELS.map((channel) => loadChannel(channel, cache)));
   const channels = {};
-  for (const channel of loaded) channels[channel.key] = channel;
+  let refresh = false;
+  for (const item of loaded) {
+    channels[item.channel.key] = item.channel;
+    if (item.videos) {
+      cache.channels = cache.channels || {};
+      cache.channels[item.channel.key] = item.videos;
+      refresh = true;
+    }
+  }
+  if (refresh) writeCache(cache);
   return { channels };
 };

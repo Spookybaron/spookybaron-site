@@ -35,7 +35,7 @@ A change to a game repo doesn't rebuild this site by itself. To pick it up, push
 
 ## Videos and social
 
-The Videos page lists recent uploads from Luke’s Life on Film. The Social page has the YouTube channels, TikTok, Twitch and X. Those video lists are fetched from YouTube’s public feed while the site builds. If YouTube doesn’t answer, the page still builds and shows a link to the channel instead.
+The Videos page lists recent uploads from Luke’s Life on Film. The Social page has the YouTube channels, TikTok, Twitch and X. Those video lists are fetched from YouTube’s public feed while the site builds. If YouTube doesn’t answer, the page uses the last saved list. If that list is missing too, it offers YouTube’s own uploads player instead.
 
 ## Cloudflare settings
 
