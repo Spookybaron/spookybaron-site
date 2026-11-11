@@ -1,6 +1,6 @@
 # spookybaron-site
 
-My website: a home page, games, a journal, videos, and the other places I post. It's hosted on Cloudflare and rebuilds on its own whenever something is pushed to `main`.
+My website: a home page, games, a journal, videos, and the other places I post. It is live at https://spookybaron.co.uk. It's hosted on Cloudflare and rebuilds on its own whenever something is pushed to `main`.
 
 ## Writing a journal entry
 
