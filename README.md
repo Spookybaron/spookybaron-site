@@ -30,6 +30,7 @@ The games right now:
 - Grok Snake — `/games/grok-snake/`
 - Cheeky Pete — `/games/cheeky-pete/`
 - Helpdesk Horde — `/games/helpdesk-horde/`
+- Ticket Rush — `/games/ticket-rush/`
 
 A change to a game repo doesn't rebuild this site by itself. To pick it up, push anything here, or click **Retry deployment** on the latest deploy in Cloudflare.
 
