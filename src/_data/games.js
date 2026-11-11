@@ -16,4 +16,9 @@ export default [
     title: "Cheeky Pete",
     text: "Letters drop in time. Hit the matching key as each one lands, while Pete cheers you on.",
   },
+  {
+    href: "/games/helpdesk-horde/",
+    title: "Helpdesk Horde",
+    text: "You’re the only IT technician and the whole building has a problem. Fire emails, book courses, keep your hair until 17:00.",
+  },
 ];
