@@ -26,4 +26,10 @@ export default [
     title: "Helpdesk Horde",
     text: "You’re the only IT technician and the whole building has a problem. Fire emails, book courses, keep your hair until 17:00.",
   },
+  {
+    href: "/games/ticket-rush/",
+    image: "/img/games/ticket-rush.webp",
+    title: "Ticket Rush",
+    text: "The Comptec ITS crew against a full ticket board. Fit cameras, run cable, rack servers, and dodge Mark’s alerts.",
+  },
 ];

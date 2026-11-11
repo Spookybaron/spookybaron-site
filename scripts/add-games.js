@@ -25,6 +25,11 @@ const games = [
     repo: "https://github.com/Spookybaron/HelpdeskHorde.git",
     files: ["index.html", "voices.js", "trailer.js"],
   },
+  {
+    name: "ticket-rush",
+    repo: "https://github.com/Spookybaron/TicketRush.git",
+    files: ["index.html"],
+  },
 ];
 
 const tmp = ".games-tmp";
