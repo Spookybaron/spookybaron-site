@@ -505,6 +505,7 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -0.
   overflow: hidden;
   border: 1px solid var(--line);
 }
+.playlist-fallback { max-width: 640px; margin-top: 1rem; }
 .yt-play {
   position: relative;
   display: block;

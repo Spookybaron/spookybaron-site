@@ -36,9 +36,12 @@ permalink: /videos/
 </section>
 {% endif %}
 {% else %}
-<div class="notice">
-  <h2>The latest videos didn’t load this time</h2>
-  <p>They’re fetched from YouTube when the site is built. YouTube didn’t answer, so the list is empty for now. The channel itself is still there.</p>
-  <p><a class="btn" href="{{ ch.url }}" target="_blank" rel="noopener noreferrer">Watch on YouTube<span class="visually-hidden"> (opens in a new tab)</span></a></p>
-</div>
+<section class="featured" aria-label="Recent uploads">
+  <div class="yt-media">
+    <button type="button" class="yt-play" data-playlist="{{ ch.uploads }}" aria-label="Play recent uploads from {{ ch.name }}">
+      <span class="play-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+  <p class="lede">Press play for YouTube’s own list of recent uploads. Nothing starts until you do.</p>
+</section>
 {% endif %}
