@@ -40,25 +40,12 @@
     if (slot.dataset.ready) return;
     var channel = slot.getAttribute("data-channel") || "";
     if (!/^[A-Za-z0-9_]+$/.test(channel)) return;
+    var host = location.hostname;
+    if (!host || !/^[A-Za-z0-9.-]+$/.test(host)) return;
     slot.dataset.ready = "1";
-    var hosts = [
-      location.hostname,
-      "spookybaron.co.uk",
-      "www.spookybaron.co.uk",
-      "spookybaron-site.lukebaron.workers.dev",
-      "localhost",
-      "127.0.0.1",
-    ];
-    var seen = Object.create(null);
-    var parts = ["channel=" + encodeURIComponent(channel)];
-    hosts.forEach(function (host) {
-      if (!host || seen[host]) return;
-      seen[host] = true;
-      parts.push("parent=" + encodeURIComponent(host));
-    });
     var iframe = document.createElement("iframe");
     iframe.className = "twitch-frame";
-    iframe.src = "https://player.twitch.tv/?" + parts.join("&");
+    iframe.src = "https://player.twitch.tv/?channel=" + encodeURIComponent(channel) + "&parent=" + encodeURIComponent(host);
     iframe.title = "Twitch player for " + channel + ". Shows the live stream, or the offline screen.";
     iframe.allowFullscreen = true;
     iframe.allow = "autoplay; fullscreen";

@@ -24,6 +24,6 @@ export default [
     href: "/games/helpdesk-horde/",
     image: "/img/games/helpdesk-horde.webp",
     title: "Helpdesk Horde",
-    text: "You’re the only IT technician and the whole building has a problem. Fire emails, book courses, keep your hair until 17:00.",
+    text: "A crowd of problems heads your way. Send replies, pick up a skill, and last until home time.",
   },
 ];
