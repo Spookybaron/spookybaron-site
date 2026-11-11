@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% set pageTitle %}{% if title %}{{ title }} · {% endif %}Spookybaron{% endset %}
-  {% set pageDesc %}{% if description %}{{ description }}{% elif title %}{{ title }} — from Spookybaron{% else %}{{ site.description }}{% endif %}{% endset %}
+  {% set pageTitle = (title + " · Spookybaron") if title else "Spookybaron" %}
+  {% set pageDesc = description if description else ((title + " — from Spookybaron") if title else site.description) %}
   {% set canonical = site.url + (page.url or "/") %}
-  <title>{{ pageTitle | trim }}</title>
-  <meta name="description" content="{{ pageDesc | trim }}">
+  <title>{{ pageTitle }}</title>
+  <meta name="description" content="{{ pageDesc }}">
   <link rel="canonical" href="{{ canonical }}">
-  <meta property="og:title" content="{{ pageTitle | trim }}">
-  <meta property="og:description" content="{{ pageDesc | trim }}">
+  <meta property="og:title" content="{{ pageTitle }}">
+  <meta property="og:description" content="{{ pageDesc }}">
   <meta property="og:url" content="{{ canonical }}">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#07080c">
