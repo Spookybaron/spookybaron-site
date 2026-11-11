@@ -20,6 +20,11 @@ const games = [
     repo: "https://github.com/Spookybaron/CheekyPete.git",
     files: ["index.html", "style.css", "game.js", "assets"],
   },
+  {
+    name: "helpdesk-horde",
+    repo: "https://github.com/Spookybaron/HelpdeskHorde.git",
+    files: ["index.html", "voices.js", "trailer.js"],
+  },
 ];
 
 const tmp = ".games-tmp";
