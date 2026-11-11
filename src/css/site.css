@@ -325,6 +325,11 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -0.
   background: rgba(0, 0, 0, 0.2);
   font-size: 0.88rem;
 }
+/* A glimpse of the game behind its name, dimmed so the name stays readable. */
+.chips li.has-shot {
+  background: linear-gradient(rgba(7, 8, 12, 0.62), rgba(7, 8, 12, 0.62)), var(--shot) center / cover no-repeat;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
 
 .band { margin-top: 3.4rem; }
 .band-head, .section-title {
@@ -344,10 +349,13 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -0.
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
 }
 .game-grid a {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
@@ -363,6 +371,21 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -0.
 .game-grid li:nth-child(1) a { background-image: linear-gradient(180deg, rgba(214, 255, 74, 0.1), transparent 42%); background-color: var(--card); }
 .game-grid li:nth-child(2) a { background-image: linear-gradient(180deg, rgba(154, 166, 255, 0.14), transparent 42%); background-color: var(--card); }
 .game-grid li:nth-child(3) a { background-image: linear-gradient(180deg, rgba(255, 177, 90, 0.12), transparent 42%); background-color: var(--card); }
+.game-grid li:nth-child(4) a { background-image: linear-gradient(180deg, rgba(255, 110, 170, 0.12), transparent 42%); background-color: var(--card); }
+/* Faded screenshot of the game: strongest on the right, gone behind the text on the left. */
+.game-grid a.has-shot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--shot) center / cover no-repeat;
+  opacity: 0.34;
+  -webkit-mask-image: linear-gradient(100deg, rgba(0, 0, 0, 0.25) 0%, #000 75%);
+  mask-image: linear-gradient(100deg, rgba(0, 0, 0, 0.25) 0%, #000 75%);
+  transition: opacity 0.2s;
+}
+.game-grid a.has-shot:hover::before { opacity: 0.55; }
+.game-grid a.has-shot strong, .game-grid a.has-shot span { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85); }
 .game-grid a:hover { border-color: var(--accent); }
 .game-grid strong {
   font-family: var(--display);

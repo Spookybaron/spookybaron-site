@@ -12,7 +12,7 @@ eleventyExcludeFromCollections: true
 <ul class="game-grid">
   {%- for game in games %}
   <li>
-    <a href="{{ game.href }}">
+    <a href="{{ game.href }}"{% if game.image %} class="has-shot" style="--shot: url('{{ game.image }}')"{% endif %}>
       <strong>{{ game.title }}</strong>
       <span>{{ game.text }}</span>
     </a>

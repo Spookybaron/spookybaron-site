@@ -20,10 +20,10 @@ description: Luke (Spookybaron), a UK creator. Games, videos, and a journal abou
     <a href="/games/">
       <p class="kicker">Play</p>
       <strong>Games</strong>
-      <span class="blurb">Three browser games. A flat scrap, a neon snake, and letters that fall in time.</span>
+      <span class="blurb">Four browser games. A flat scrap, a neon snake, falling letters, and a helpdesk under siege.</span>
       <ul class="chips">
         {%- for game in games %}
-        <li>{{ game.title }}</li>
+        <li{% if game.image %} class="has-shot" style="--shot: url('{{ game.image }}')"{% endif %}>{{ game.title }}</li>
         {%- endfor %}
       </ul>
       <span class="go">Enter the arcade</span>
@@ -70,7 +70,7 @@ description: Luke (Spookybaron), a UK creator. Games, videos, and a journal abou
   <ul class="game-grid">
     {%- for game in games %}
     <li>
-      <a href="{{ game.href }}">
+      <a href="{{ game.href }}"{% if game.image %} class="has-shot" style="--shot: url('{{ game.image }}')"{% endif %}>
         <strong>{{ game.title }}</strong>
         <span>{{ game.text }}</span>
       </a>
