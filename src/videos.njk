@@ -1,49 +1,81 @@
 ---
 layout: base.njk
 title: Videos
-description: Recent uploads from Luke’s Life on Film. Press play and the video loads then.
+description: Watch here without leaving the site. The newest uploads from both YouTube channels, plus shelves of cartoons, gaming, days out and things made at home.
 permalink: /videos/
 ---
 {% from "video.njk" import player, videoCard %}
-{% set ch = youtube.channels.life %}
+{% set latest = youtube.channels | latestFrom(["spooky", "life"]) %}
 
 <header class="page-head">
-  <p class="kicker">YouTube · @{{ ch.handle }}</p>
-  <h1>{{ ch.name }}</h1>
-  <p class="lede">{{ ch.blurb }} Press play and the video loads then. Nothing starts on its own.</p>
-  <p class="page-actions"><a class="btn" href="{{ ch.url }}" target="_blank" rel="noopener noreferrer me">Open the channel<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+  <p class="kicker">Watch here</p>
+  <h1>Videos</h1>
+  <p class="lede">Everything from Spooky Baron and Luke’s Life on Film, playable on this page. Newest first, then sorted onto shelves. Nothing starts until you press play.</p>
+  <nav class="shelf-nav" aria-label="Video shelves">
+    <ul>
+      <li><a href="#latest">Latest</a></li>
+      {%- for shelf in shelves %}
+      <li><a href="#{{ shelf.slug }}">{{ shelf.title }}</a></li>
+      {%- endfor %}
+    </ul>
+  </nav>
 </header>
 
-<div data-youtube-live="life" data-youtube-mode="grid" data-youtube-count="12">
-{% if ch.ok %}
-<section class="featured" aria-label="Latest video">
-  <article class="vcard featured-card" data-id="{{ ch.videos[0].id }}">
-    {{ player(ch.videos[0], true) }}
-    <h2><a href="{{ ch.videos[0].url }}" target="_blank" rel="noopener noreferrer">{{ ch.videos[0].title }}</a></h2>
-    {% if ch.videos[0].published %}<time datetime="{{ ch.videos[0].published }}">{{ ch.videos[0].published | niceDate }}</time>{% endif %}
-  </article>
+<section id="latest" class="shelf" aria-labelledby="latest-title">
+  <h2 id="latest-title" class="visually-hidden">Latest uploads</h2>
+  <div data-youtube-live="spooky,life" data-youtube-mode="grid" data-youtube-count="9" data-youtube-more="Also new">
+  {% if latest | length %}
+  <section class="featured" aria-label="Latest video">
+    <article class="vcard featured-card" data-id="{{ latest[0].id }}">
+      {{ player(latest[0], true) }}
+      <h2><a href="{{ latest[0].url }}" target="_blank" rel="noopener noreferrer">{{ latest[0].title }}</a></h2>
+      {% if latest[0].published %}<time datetime="{{ latest[0].published }}">{{ latest[0].published | niceDate }}</time>{% endif %}
+    </article>
+  </section>
+
+  {% if latest | length > 1 %}
+  <section aria-labelledby="more-videos">
+    <h2 id="more-videos" class="section-title">Also new</h2>
+    <ul class="video-grid">
+      {%- for video in latest | head(9) %}
+      {%- if not loop.first %}
+      <li>{{ videoCard(video) }}</li>
+      {%- endif %}
+      {%- endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% else %}
+  <section class="featured" aria-label="Recent uploads">
+    <div class="yt-media">
+      <button type="button" class="yt-play" data-playlist="{{ youtube.channels.life.uploads }}" aria-label="Play recent uploads from {{ youtube.channels.life.name }}">
+        <span class="play-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+    <p class="lede">Press play for YouTube’s own list of recent uploads. Nothing starts until you do.</p>
+  </section>
+  {% endif %}
+  </div>
 </section>
 
-{% if ch.videos | length > 1 %}
-<section aria-labelledby="more-videos">
-  <h2 id="more-videos" class="section-title">More recent uploads</h2>
+{% for shelf in shelves %}
+<section id="{{ shelf.slug }}" class="shelf" aria-labelledby="{{ shelf.slug }}-title">
+  <h2 id="{{ shelf.slug }}-title" class="section-title">{{ shelf.title }}</h2>
+  <p class="shelf-blurb">{{ shelf.blurb }}</p>
   <ul class="video-grid">
-    {%- for video in ch.videos %}
-    {%- if not loop.first %}
+    {%- for video in shelf.videos %}
     <li>{{ videoCard(video) }}</li>
-    {%- endif %}
     {%- endfor %}
   </ul>
 </section>
-{% endif %}
-{% else %}
-<section class="featured" aria-label="Recent uploads">
-  <div class="yt-media">
-    <button type="button" class="yt-play" data-playlist="{{ ch.uploads }}" aria-label="Play recent uploads from {{ ch.name }}">
-      <span class="play-icon" aria-hidden="true"></span>
-    </button>
-  </div>
-  <p class="lede">Press play for YouTube’s own list of recent uploads. Nothing starts until you do.</p>
+{% endfor %}
+
+<section class="shelf channel-links" aria-labelledby="channels-title">
+  <h2 id="channels-title" class="section-title">Subscribe</h2>
+  <p class="page-actions">
+    {%- for key in ["spooky", "life"] %}
+    {% set ch = youtube.channels[key] %}
+    <a class="btn" href="{{ ch.url }}" target="_blank" rel="noopener noreferrer me">{{ ch.name }}<span class="visually-hidden"> on YouTube (opens in a new tab)</span></a>
+    {%- endfor %}
+  </p>
 </section>
-{% endif %}
-</div>

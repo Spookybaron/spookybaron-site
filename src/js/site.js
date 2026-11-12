@@ -210,7 +210,7 @@
       var rest = list.slice(1);
       var html = '<section class="featured" aria-label="Latest video">' + cardHtml(featured, true) + "</section>";
       if (rest.length) {
-        html += '<section aria-labelledby="more-videos"><h2 id="more-videos" class="section-title">More recent uploads</h2><ul class="video-grid">';
+        html += '<section aria-labelledby="more-videos"><h2 id="more-videos" class="section-title">' + esc(root.getAttribute("data-youtube-more") || "More recent uploads") + '</h2><ul class="video-grid">';
         rest.forEach(function (video) {
           html += "<li>" + cardHtml(video, false) + "</li>";
         });
@@ -229,9 +229,19 @@
       .then(function (data) {
         if (!data || !data.channels) return;
         slots.forEach(function (slot) {
-          var channel = data.channels[slot.getAttribute("data-youtube-live")];
-          if (!channel || !channel.ok || !channel.videos || !channel.videos.length) return;
-          paint(slot, channel.videos);
+          // One key, or several separated by commas to mix channels newest first.
+          var keys = slot.getAttribute("data-youtube-live").split(",");
+          var videos = [];
+          for (var i = 0; i < keys.length; i++) {
+            var channel = data.channels[keys[i].trim()];
+            // Leave the built list alone unless every channel answered.
+            if (!channel || !channel.ok || !channel.videos || !channel.videos.length) return;
+            videos = videos.concat(channel.videos);
+          }
+          if (keys.length > 1) {
+            videos.sort(function (a, b) { return String(b.published).localeCompare(String(a.published)); });
+          }
+          paint(slot, videos);
         });
       })
       .catch(function () {});
