@@ -40,26 +40,22 @@ permalink: /social/
 {% endfor %}
 
 <section class="platform" id="tiktok" aria-labelledby="tiktok-title">
-  <div class="platform-split">
-    <div>
-      <p class="kicker">TikTok · {{ social.tiktok.handle }}</p>
-      <h2 id="tiktok-title">{{ social.tiktok.name }}</h2>
-      <p>TikTok’s own profile embed. If the card stays plain, TikTok didn’t load it — the button still opens the channel.</p>
-      <p class="page-actions"><a class="btn" href="{{ social.tiktok.url }}" target="_blank" rel="noopener noreferrer me">Open TikTok<span class="visually-hidden"> (opens in a new tab)</span></a></p>
-    </div>
-    <div class="tiktok-hold">
-      <blockquote class="tiktok-embed" cite="{{ social.tiktok.url }}" data-unique-id="spookybaron" data-embed-from="oembed" data-embed-type="creator">
-        <section>
-          <a class="tiktok-fallback" target="_blank" rel="noopener noreferrer" href="{{ social.tiktok.url }}?refer=creator_embed">
-            <span class="monogram" aria-hidden="true">SB</span>
-            <span>
-              <strong>{{ social.tiktok.name }}</strong>
-              <span>{{ social.tiktok.handle }} on TikTok</span>
-            </span>
-          </a>
-        </section>
-      </blockquote>
-    </div>
+  <p class="kicker">TikTok · {{ social.tiktok.handle }}</p>
+  <h2 id="tiktok-title">{{ social.tiktok.name }}</h2>
+  <p>Recent clips from the channel. If the row below stays empty, the button still opens it.</p>
+  <p class="page-actions"><a class="btn" href="{{ social.tiktok.url }}" target="_blank" rel="noopener noreferrer me">Open TikTok<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+  <div class="tiktok-hold">
+    <blockquote class="tiktok-embed" cite="{{ social.tiktok.url }}" data-unique-id="spookybaron" data-embed-from="oembed" data-embed-type="creator">
+      <section>
+        <a class="tiktok-fallback" target="_blank" rel="noopener noreferrer" href="{{ social.tiktok.url }}?refer=creator_embed">
+          <span class="monogram" aria-hidden="true">SB</span>
+          <span>
+            <strong>{{ social.tiktok.name }}</strong>
+            <span>{{ social.tiktok.handle }} on TikTok</span>
+          </span>
+        </a>
+      </section>
+    </blockquote>
   </div>
   <script async src="https://www.tiktok.com/embed.js"></script>
 </section>
