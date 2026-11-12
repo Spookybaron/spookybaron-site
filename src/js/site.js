@@ -150,13 +150,34 @@
     mountFrame(button, false);
   });
 
-  document.addEventListener("error", function (event) {
-    var img = event.target;
-    if (!img || !img.getAttribute || !img.getAttribute("data-fallback")) return;
+  // Shorts ask for the portrait thumbnail first. When a Short has none, YouTube
+  // doesn't fail: it sends its 120x90 grey placeholder. So swap to the normal
+  // thumbnail on an error, or when the picture that arrived is that placeholder.
+  function useFallback(img) {
     var next = img.getAttribute("data-fallback");
+    if (!next) return;
     img.removeAttribute("data-fallback");
     img.src = next;
+  }
+
+  function isPlaceholder(img) {
+    return img.naturalWidth > 0 && img.naturalWidth <= 120;
+  }
+
+  document.addEventListener("error", function (event) {
+    var img = event.target;
+    if (img && img.getAttribute && img.getAttribute("data-fallback")) useFallback(img);
   }, true);
+
+  document.addEventListener("load", function (event) {
+    var img = event.target;
+    if (img && img.tagName === "IMG" && img.getAttribute("data-fallback") && isPlaceholder(img)) useFallback(img);
+  }, true);
+
+  // Pictures that finished before this script ran.
+  document.querySelectorAll("img[data-fallback]").forEach(function (img) {
+    if (img.complete && isPlaceholder(img)) useFallback(img);
+  });
 
   function slideHtml(video) {
     var date = niceDate(video.published);
