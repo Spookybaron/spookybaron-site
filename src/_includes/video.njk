@@ -15,8 +15,24 @@
 </div>
 {% endmacro %}
 
+{% macro feedSlide(video) %}
+<article class="yt-slide" data-id="{{ video.id }}">
+  <div class="yt-media{% if video.short %} is-short{% endif %}">
+    <button type="button" class="yt-play" data-id="{{ video.id }}" aria-label="Play {{ video.title }}">
+      <img src="{{ video.thumb }}" alt="" width="480" height="360" decoding="async"{% if video.short %} data-fallback="https://i.ytimg.com/vi/{{ video.id }}/hqdefault.jpg"{% endif %}>
+      <span class="play-icon" aria-hidden="true"></span>
+    </button>
+    <button type="button" class="yt-sound" hidden>Unmute</button>
+  </div>
+  <div class="yt-caption">
+    <h3><a href="{{ video.url }}" target="_blank" rel="noopener noreferrer">{{ video.title }}</a></h3>
+    {% if video.published %}<time datetime="{{ video.published }}">{{ video.published | niceDate }}</time>{% endif %}
+  </div>
+</article>
+{% endmacro %}
+
 {% macro videoCard(video) %}
-<article class="vcard">
+<article class="vcard" data-id="{{ video.id }}">
   {{ player(video) }}
   <h3><a href="{{ video.url }}" target="_blank" rel="noopener noreferrer">{{ video.title }}</a></h3>
   {% if video.published %}<time datetime="{{ video.published }}">{{ video.published | niceDate }}</time>{% endif %}

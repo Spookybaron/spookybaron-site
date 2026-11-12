@@ -560,6 +560,96 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -0.
   border-color: transparent transparent transparent var(--accent-ink);
 }
 
+.yt-feed {
+  max-width: 420px;
+  height: min(78vh, 740px);
+  margin-top: 1rem;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: #000;
+}
+.yt-slide {
+  position: relative;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.yt-feed .yt-media {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  border: 0;
+  border-radius: 0;
+}
+.yt-feed .yt-play,
+.yt-feed .yt-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+}
+.yt-feed .yt-play img,
+.yt-feed .yt-media.is-short .yt-play,
+.yt-feed .yt-media.is-short .yt-play img,
+.yt-feed .yt-media.is-short .yt-frame,
+.yt-feed .yt-frame {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+  object-fit: cover;
+}
+.yt-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 3rem 1rem 0.9rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+  pointer-events: none;
+}
+.yt-caption h3 {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+.yt-caption a,
+.yt-caption time {
+  pointer-events: auto;
+}
+.yt-caption a {
+  color: #fff;
+  text-decoration: none;
+}
+.yt-caption time {
+  display: block;
+  margin-top: 0.2rem;
+}
+.yt-sound {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.yt-play[hidden],
+.yt-sound[hidden] { display: none !important; }
+
 .platform {
   margin-top: 0.5rem;
   padding: 2.2rem 0;
