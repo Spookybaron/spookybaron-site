@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% set pageTitle = (title + " · Spookybaron") if title else "Spookybaron" %}
-  {% set pageDesc = description if description else ((title + " — from Spookybaron") if title else site.description) %}
+  {% set pageDesc = description or (content | firstSentence) or site.description %}
   {% set canonical = site.url + (page.url or "/") %}
   <title>{{ pageTitle }}</title>
   <meta name="description" content="{{ pageDesc }}">
@@ -16,6 +16,9 @@
   <meta name="theme-color" content="#07080c">
   <meta name="color-scheme" content="dark">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+  {%- if site.googleSiteVerification %}
+  <meta name="google-site-verification" content="{{ site.googleSiteVerification }}">
+  {%- endif %}
   <link rel="stylesheet" href="/css/site.css">
   <link rel="icon" href="/favicon.ico">
   <link rel="alternate" type="application/atom+xml" href="/journal/feed.xml" title="Journal">
@@ -49,5 +52,8 @@
     </div>
   </footer>
   <script src="/js/site.js" defer></script>
+  {%- if site.beaconToken %}
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"{{ site.beaconToken }}"}'></script>
+  {%- endif %}
 </body>
 </html>

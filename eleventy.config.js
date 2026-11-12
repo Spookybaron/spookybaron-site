@@ -23,6 +23,25 @@ export default function (eleventyConfig) {
   );
   eleventyConfig.addFilter("head", (arr, n) => arr.slice(0, n));
   eleventyConfig.addFilter("isoDate", (date) => new Date(date).toISOString());
+  eleventyConfig.addFilter("dateOnly", (date) => new Date(date).toISOString().slice(0, 10));
+  eleventyConfig.addFilter("firstSentence", (html) => {
+    const paras = [...String(html || "").matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)]
+      .map((match) => match[1]
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;|&apos;/g, "'")
+        .replace(/&nbsp;/g, " ")
+        .replace(/\s+/g, " ")
+        .trim())
+      .filter((text) => text && !text.startsWith("Spooky Baron's What's New"));
+    const text = paras.find((item) => item.length > 40) || paras[0] || "";
+    if (!text) return "";
+    if (text.length <= 160) return text;
+    const slice = text.slice(0, 156);
+    const stop = Math.max(slice.lastIndexOf(". "), slice.lastIndexOf("! "), slice.lastIndexOf("? "));
+    return stop > 60 ? slice.slice(0, stop + 1) : `${slice.trimEnd()}…`;
+  });
 
   return {
     dir: { input: "src", output: "_site" },
