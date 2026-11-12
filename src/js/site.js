@@ -3,7 +3,8 @@
 (function () {
   var videoId = /^[A-Za-z0-9_-]{11}$/;
   var playlistId = /^[A-Za-z0-9_-]{13,40}$/;
-  var current = null;
+  var playing = [];
+  var MAX_PLAYING = 3;
 
   function canAutoplay() {
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -42,13 +43,15 @@
       '<span class="play-icon" aria-hidden="true"></span></button>';
   }
 
-  function mountFrame(button, mute) {
+  function mountFrame(button, mute, loop) {
     var id = button.getAttribute("data-id") || "";
     var playlist = button.getAttribute("data-playlist") || "";
     var src = "";
     if (videoId.test(id)) {
       src = "https://www.youtube-nocookie.com/embed/" + id +
-        "?autoplay=1&playsinline=1&rel=0&enablejsapi=1" + (mute ? "&mute=1" : "");
+        "?autoplay=1&playsinline=1&rel=0&enablejsapi=1" +
+        (mute ? "&mute=1" : "") +
+        (loop ? "&loop=1&playlist=" + id : "");
     } else if (playlistId.test(playlist)) {
       src = "https://www.youtube-nocookie.com/embed/videoseries?list=" + playlist + "&rel=0";
     }
@@ -73,16 +76,17 @@
     if (button) button.hidden = false;
     var sound = slide.querySelector(".yt-sound");
     if (sound) sound.hidden = true;
-    if (current === slide) current = null;
+    var index = playing.indexOf(slide);
+    if (index !== -1) playing.splice(index, 1);
   }
 
-  function showFrame(slide, mute) {
-    if (current && current !== slide) hideFrame(current);
-    current = slide;
+  function showFrame(slide, mute, loop) {
     if (slide.querySelector("iframe.yt-frame")) return;
+    if (playing.indexOf(slide) === -1 && playing.length >= MAX_PLAYING) hideFrame(playing[0]);
+    if (playing.indexOf(slide) === -1) playing.push(slide);
     var button = slide.querySelector(".yt-play");
     if (!button) return;
-    mountFrame(button, mute);
+    mountFrame(button, mute, loop);
     var sound = slide.querySelector(".yt-sound");
     if (sound) {
       sound.hidden = false;
@@ -104,13 +108,13 @@
     if (!canAutoplay() || feed._ytObserver) return;
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.7) {
-          showFrame(entry.target, true);
-        } else if (entry.intersectionRatio < 0.35) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+          showFrame(entry.target, true, true);
+        } else if (entry.intersectionRatio < 0.4) {
           hideFrame(entry.target);
         }
       });
-    }, { root: feed, threshold: [0, 0.35, 0.7, 1] });
+    }, { root: feed, threshold: [0, 0.4, 0.6, 1] });
     feed._ytObserver = observer;
     feed.querySelectorAll(".yt-slide").forEach(function (slide) {
       observer.observe(slide);
@@ -139,7 +143,7 @@
     if (!button || button.hidden) return;
     var slide = button.closest(".yt-slide");
     if (slide) {
-      showFrame(slide, false);
+      showFrame(slide, false, false);
       return;
     }
     if (button.parentNode && button.parentNode.querySelector("iframe.yt-frame")) return;
@@ -196,7 +200,9 @@
         root._ytObserver.disconnect();
         root._ytObserver = null;
       }
-      if (current && root.contains(current)) hideFrame(current);
+      playing.slice().forEach(function (slide) {
+        if (root.contains(slide)) hideFrame(slide);
+      });
       root.innerHTML = list.map(slideHtml).join("");
       bindFeed(root);
     } else {
@@ -232,6 +238,22 @@
   }
 
   watchFeeds(document);
+  document.querySelectorAll(".yt-row").forEach(function (row) {
+    var scroller = row.querySelector(".yt-feed");
+    if (!scroller) return;
+    function step(direction) {
+      var card = scroller.querySelector(".yt-slide");
+      var amount = card ? card.getBoundingClientRect().width + 12 : 240;
+      scroller.scrollBy({
+        left: direction * amount,
+        behavior: canAutoplay() ? "smooth" : "auto",
+      });
+    }
+    var prev = row.querySelector(".yt-arrow-prev");
+    var next = row.querySelector(".yt-arrow-next");
+    if (prev) prev.addEventListener("click", function () { step(-1); });
+    if (next) next.addEventListener("click", function () { step(1); });
+  });
   refresh();
 
   function mountTwitch(slot) {
