@@ -1,6 +1,7 @@
 // Settings for Cloudflare: publish the built site in _site as static files.
 // workers_dev stays on so the workers.dev address keeps working beside the custom domain.
 // preview_urls is left unset so an existing preview setting is not changed.
+// run_worker_first sends every path, including /api/youtube, to the Worker before assets.
 {
   "name": "spookybaron-site",
   "main": "worker/index.js",

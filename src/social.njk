@@ -4,7 +4,7 @@ title: Social
 description: Luke on YouTube, TikTok, Twitch and X.
 permalink: /social/
 ---
-{% from "video.njk" import videoCard %}
+{% from "video.njk" import feedSlide %}
 
 <header class="page-head">
   <p class="kicker">Elsewhere</p>
@@ -20,11 +20,15 @@ permalink: /social/
   <p>{{ ch.blurb }}</p>
   <p class="page-actions"><a class="btn" href="{{ ch.url }}" target="_blank" rel="noopener noreferrer me">Open channel<span class="visually-hidden"> (opens in a new tab)</span></a></p>
   {% if ch.ok %}
-  <ul class="video-grid">
-    {%- for video in ch.videos | head(4) %}
-    <li>{{ videoCard(video) }}</li>
-    {%- endfor %}
-  </ul>
+  <div class="yt-row">
+    <button type="button" class="yt-arrow yt-arrow-prev" aria-label="Previous videos">‹</button>
+    <div class="yt-feed" data-youtube-live="{{ ch.key }}" data-youtube-mode="feed" data-youtube-count="12" tabindex="0" aria-label="Recent videos from {{ ch.name }}">
+      {%- for video in ch.videos | head(12) %}
+      {{ feedSlide(video) }}
+      {%- endfor %}
+    </div>
+    <button type="button" class="yt-arrow yt-arrow-next" aria-label="Next videos">›</button>
+  </div>
   {% else %}
   <div class="yt-media playlist-fallback">
     <button type="button" class="yt-play" data-playlist="{{ ch.uploads }}" aria-label="Play recent uploads from {{ ch.name }}">

@@ -3,96 +3,26 @@
 // A saved copy in youtube-cache.json is used when the live feed does not answer,
 // and that file is rewritten whenever a live fetch works.
 // Set YOUTUBE_FETCH=fail to skip the network and use the saved list.
+// The pages also refresh from /api/youtube after they load.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { CHANNELS as FEEDS, LIMIT, feedUrl, videosFrom, cleanVideo } from "../youtube-feed.js";
 
-const CHANNELS = [
-  {
-    key: "spooky",
-    handle: "Spookybaron",
-    name: "Spooky Baron",
-    url: "https://www.youtube.com/@Spookybaron",
-    channelId: "UC1uinYx_VdlOCFbMgVwxohw",
-    blurb: "Gaming, retro, VR, and the cartoons.",
-  },
-  {
-    key: "life",
-    handle: "LukesLifeOnFilm",
-    name: "Luke’s Life on Film",
-    url: "https://www.youtube.com/@LukesLifeOnFilm",
-    channelId: "UCfTNKc-Ni1_n8UxUC9e6JiA",
-    blurb: "Everyday filming: days out, the house, and whatever has just been made.",
-  },
-];
+const BLURBS = {
+  spooky: "Gaming, retro, VR, and the cartoons.",
+  life: "Everyday filming: days out, the house, and whatever has just been made.",
+};
 
-const LIMIT = 12;
+const CHANNELS = FEEDS.map((channel) => ({ ...channel, blurb: BLURBS[channel.key] || "" }));
+
 const ATTEMPTS = 3;
 const TIMEOUT_MS = 10000;
 const BROWSER_UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
 
 const cachePath = join(dirname(fileURLToPath(import.meta.url)), "youtube-cache.json");
-
-function decode(value) {
-  return value
-    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
-    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;|&apos;/g, "'")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&amp;/g, "&")
-    .trim();
-}
-
-function cleanVideo(video) {
-  if (!video || !/^[A-Za-z0-9_-]{11}$/.test(video.id || "")) return null;
-  const title = typeof video.title === "string" ? video.title.trim() : "";
-  if (!title) return null;
-  const watch = `https://www.youtube.com/watch?v=${video.id}`;
-  const url =
-    typeof video.url === "string" && video.url.startsWith("https://www.youtube.com/")
-      ? video.url
-      : watch;
-  const short = url.includes("/shorts/");
-  return {
-    id: video.id,
-    title,
-    published: typeof video.published === "string" ? video.published : "",
-    url,
-    short,
-    thumb: `https://i.ytimg.com/vi/${video.id}/${short ? "oardefault" : "hqdefault"}.jpg`,
-  };
-}
-
-function videosFrom(xml) {
-  const videos = [];
-  for (const chunk of xml.split("<entry>").slice(1)) {
-    const id = chunk.match(/<yt:videoId>([A-Za-z0-9_-]{11})<\/yt:videoId>/)?.[1];
-    if (!id) continue;
-    const title = decode(chunk.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? "");
-    const published = chunk.match(/<published>([^<]+)<\/published>/)?.[1] ?? "";
-    const href =
-      chunk.match(/<link[^>]*rel="alternate"[^>]*href="([^"]+)"/)?.[1] ||
-      `https://www.youtube.com/watch?v=${id}`;
-    let url = `https://www.youtube.com/watch?v=${id}`;
-    try {
-      const parsed = new URL(href);
-      if (parsed.hostname === "www.youtube.com" || parsed.hostname === "youtube.com") {
-        url = parsed.toString();
-      }
-    } catch {
-      // keep the watch URL
-    }
-    const video = cleanVideo({ id, title, published, url });
-    if (video) videos.push(video);
-    if (videos.length >= LIMIT) break;
-  }
-  return videos;
-}
 
 function readCache() {
   try {
@@ -169,9 +99,8 @@ function withUploads(channel, videos, fromCache) {
 }
 
 async function loadChannel(channel, cache) {
-  const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channel.channelId}`;
   try {
-    const xml = await fetchText(feedUrl);
+    const xml = await fetchText(feedUrl(channel.channelId));
     const videos = videosFrom(xml);
     if (!videos.length) throw new Error("feed had no videos");
     console.log(`YouTube @${channel.handle}: ${videos.length} videos from the live feed`);

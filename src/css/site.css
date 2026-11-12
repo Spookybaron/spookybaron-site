@@ -560,6 +560,117 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -0.
   border-color: transparent transparent transparent var(--accent-ink);
 }
 
+.yt-row {
+  position: relative;
+  margin-top: 1rem;
+}
+.yt-feed {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 2px;
+  padding: 2px 2px 8px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  height: auto;
+  max-width: none;
+}
+.yt-slide {
+  position: relative;
+  flex: 0 0 calc((100% - 28px) / 3.4);
+  min-width: 0;
+  height: auto;
+  scroll-snap-align: start;
+}
+.yt-feed .yt-media {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  aspect-ratio: 9 / 16;
+  border-radius: 16px;
+}
+.yt-feed .yt-play,
+.yt-feed .yt-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+}
+.yt-feed .yt-play img,
+.yt-feed .yt-media.is-short .yt-play,
+.yt-feed .yt-media.is-short .yt-play img,
+.yt-feed .yt-media.is-short .yt-frame,
+.yt-feed .yt-frame {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+  object-fit: cover;
+}
+.yt-caption { margin-top: 0.45rem; }
+.yt-caption h3 {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.yt-caption a { color: var(--text); text-decoration: none; }
+.yt-caption a:hover { color: var(--accent); }
+.yt-caption time { display: block; margin-top: 0.15rem; }
+.yt-sound {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 3;
+  min-height: 36px;
+  padding: 0 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.yt-arrow {
+  display: none;
+}
+@media (max-width: 720px) {
+  .yt-slide { flex-basis: calc((100% - 12px) / 1.7); }
+}
+@media (min-width: 800px) {
+  .yt-arrow {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: 28%;
+    z-index: 4;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .yt-arrow-prev { left: -6px; }
+  .yt-arrow-next { right: -6px; }
+}
+.yt-play[hidden],
+.yt-sound[hidden] { display: none !important; }
+
 .platform {
   margin-top: 0.5rem;
   padding: 2.2rem 0;

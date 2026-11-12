@@ -14,9 +14,10 @@ permalink: /videos/
   <p class="page-actions"><a class="btn" href="{{ ch.url }}" target="_blank" rel="noopener noreferrer me">Open the channel<span class="visually-hidden"> (opens in a new tab)</span></a></p>
 </header>
 
+<div data-youtube-live="life" data-youtube-mode="grid" data-youtube-count="12">
 {% if ch.ok %}
 <section class="featured" aria-label="Latest video">
-  <article class="vcard featured-card">
+  <article class="vcard featured-card" data-id="{{ ch.videos[0].id }}">
     {{ player(ch.videos[0], true) }}
     <h2><a href="{{ ch.videos[0].url }}" target="_blank" rel="noopener noreferrer">{{ ch.videos[0].title }}</a></h2>
     {% if ch.videos[0].published %}<time datetime="{{ ch.videos[0].published }}">{{ ch.videos[0].published | niceDate }}</time>{% endif %}
@@ -45,3 +46,4 @@ permalink: /videos/
   <p class="lede">Press play for YouTube’s own list of recent uploads. Nothing starts until you do.</p>
 </section>
 {% endif %}
+</div>
