@@ -682,14 +682,9 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -0.
 }
 .platform > p { max-width: 62ch; color: var(--muted); }
 .platform .kicker { color: var(--accent); }
-.platform-split {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
-  gap: 1.4rem 1.8rem;
-  align-items: start;
-}
-.platform-split p { color: var(--muted); }
 .tiktok-hold {
+  width: min(100%, 780px);
+  margin-top: 1rem;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -817,7 +812,7 @@ h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -0.
 .foot a:hover { color: var(--accent); }
 
 @media (max-width: 860px) {
-  .bento, .game-grid, .platform-split { grid-template-columns: 1fr; }
+  .bento, .game-grid { grid-template-columns: 1fr; }
   .bento { grid-template-areas: "games" "journal" "videos" "social"; }
   .bento-games a { min-height: 0; }
 }
