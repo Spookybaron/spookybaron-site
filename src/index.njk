@@ -45,11 +45,12 @@ description: Luke (Spookybaron), a UK creator. Games, videos, and a journal abou
     <a href="/videos/">
       <p class="kicker">Watch</p>
       <strong>Videos</strong>
-      <span class="blurb">Luke’s Life on Film. Recent uploads, and nothing plays until you press it.</span>
-      {%- if youtube.channels.life.ok %}
-      <span class="peek">Latest: {{ youtube.channels.life.videos[0].title }}</span>
+      <span class="blurb">Both channels in one place: cartoons, gaming, days out and things made at home.</span>
+      {%- set newest = youtube.channels | latestFrom(["spooky", "life"]) %}
+      {%- if newest | length %}
+      <span class="peek">Latest: {{ newest[0].title }}</span>
       {%- endif %}
-      <span class="go">Recent uploads</span>
+      <span class="go">Watch here</span>
     </a>
   </li>
   <li class="bento-social">

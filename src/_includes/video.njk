@@ -35,6 +35,7 @@
 <article class="vcard" data-id="{{ video.id }}">
   {{ player(video) }}
   <h3><a href="{{ video.url }}" target="_blank" rel="noopener noreferrer">{{ video.title }}</a></h3>
+  {% if video.note %}<p class="vnote">{{ video.note }}</p>{% endif %}
   {% if video.published %}<time datetime="{{ video.published }}">{{ video.published | niceDate }}</time>{% endif %}
 </article>
 {% endmacro %}

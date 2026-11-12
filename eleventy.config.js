@@ -22,6 +22,12 @@ export default function (eleventyConfig) {
     })
   );
   eleventyConfig.addFilter("head", (arr, n) => arr.slice(0, n));
+  // Newest first across several YouTube channels, e.g. youtube.channels | latestFrom(["spooky", "life"]).
+  eleventyConfig.addFilter("latestFrom", (channels, keys) =>
+    keys
+      .flatMap((key) => (channels[key] && channels[key].videos) || [])
+      .sort((a, b) => String(b.published).localeCompare(String(a.published)))
+  );
   eleventyConfig.addFilter("isoDate", (date) => new Date(date).toISOString());
   eleventyConfig.addFilter("dateOnly", (date) => new Date(date).toISOString().slice(0, 10));
   eleventyConfig.addFilter("firstSentence", (html) => {
